@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_oneplanet/theme/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,11 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 4,
         title: Text(
           "OnePlanet",
-          style: TextStyle(color: Colors.black),
+          style: Theme.of(context).textTheme.headline1!.copyWith(color: AppColors.kDarkGreen),
         ),
       ),
       body: Center(

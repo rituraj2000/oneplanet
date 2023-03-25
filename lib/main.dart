@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_oneplanet/screens/landingPage.dart';
+import 'package:project_oneplanet/theme/base_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OnePlanet',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: AppTheme.lightTheme,
       home: const LandingPage(),
       debugShowCheckedModeBanner: false,
     );

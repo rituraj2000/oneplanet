@@ -7,6 +7,7 @@ import 'package:project_oneplanet/screens/chatPage.dart';
 import 'package:project_oneplanet/screens/homePage.dart';
 import 'package:project_oneplanet/screens/mapPage.dart';
 import 'package:project_oneplanet/screens/newPost.dart';
+import 'package:project_oneplanet/theme/colors.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -119,11 +120,11 @@ class _LandingPageState extends State<LandingPage>
         AccountPage(),
       ].elementAt(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.kDarkGreen,
         child: Icon(
-          CupertinoIcons.add,
-          size: 26,
-          color: Colors.grey,
+          Icons.add,
+          size: 28,
+          color: Colors.white,
         ),
         onPressed: () {
           _fabAnimationController.reset();
@@ -142,7 +143,7 @@ class _LandingPageState extends State<LandingPage>
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: iconList.length,
         tabBuilder: (int index, bool isActive) {
-          final color = isActive ? Colors.green : Colors.grey;
+          final color = isActive ? AppColors.kDarkGreen : Colors.grey;
           return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

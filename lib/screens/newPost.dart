@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project_oneplanet/theme/colors.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -14,7 +15,14 @@ class _NewPostState extends State<NewPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add a New Post"),
+        centerTitle: true,
+        title: Text(
+          "Add a New Post",
+          style: Theme.of(context)
+              .textTheme
+              .headline2!
+              .copyWith(color: AppColors.kDarkGreen),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -44,7 +52,8 @@ class _NewPostState extends State<NewPost> {
                   shape: const StadiumBorder(),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
                     "Post",
                     style: GoogleFonts.poppins(
