@@ -1,4 +1,5 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,7 +11,8 @@ import 'package:project_oneplanet/screens/newPost.dart';
 import 'package:project_oneplanet/theme/colors.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+  final User currentUser;
+  const LandingPage({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -117,7 +119,7 @@ class _LandingPageState extends State<LandingPage>
         ChatScreen(),
 
         ///Account page
-        AccountPage(),
+        AccountPage(currentUser: widget.currentUser,),
       ].elementAt(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.kDarkGreen,
