@@ -34,6 +34,13 @@ class _LandingPageState extends State<LandingPage>
     CupertinoIcons.person
   ];
 
+  final boldIconList = [
+    CupertinoIcons.house_fill,
+    CupertinoIcons.map_fill,
+    CupertinoIcons.chat_bubble_text_fill,
+    CupertinoIcons.person_fill
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -141,7 +148,7 @@ class _LandingPageState extends State<LandingPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                iconList[index],
+                isActive ? boldIconList[index]:iconList[index],
                 size: 24,
                 color: color,
               ),
