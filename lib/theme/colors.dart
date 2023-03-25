@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// Contains all the colors used in the app.
 class AppColors {
   static const Color kGreenYellow = Color(0xffC2CB0F);
+  static const Color kLightGreen = Color(0xff33944D);
   static const Color kDarkGreen = Color(0xff28793C);
   static const Color kBackgroundGreen = Color(0xffE7EEE7);
   static const Color kTextDarkGreen = Color(0xff144C2F);
