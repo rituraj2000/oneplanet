@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_oneplanet/screens/splashScreen.dart';
 import 'firebase_options.dart';
-import 'package:project_oneplanet/screens/landingPage.dart';
 import 'package:project_oneplanet/theme/base_theme.dart';
 
 void main() async{
