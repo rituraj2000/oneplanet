@@ -1,12 +1,15 @@
-class UserModel{
+class PostModel{
   String? byid;
   String? purpose;
   String? description;
   String? time;
 
-  UserModel({this.byid, this.purpose, this.time, this.description,});
-  UserModel.fromJson(Map<String,dynamic> json){
+  PostModel({this.byid, this.purpose, this.time, this.description,});
+  PostModel.fromJson(Map<String,dynamic> json){
     byid = json['byid'];
+    purpose = json['purpose'];
+    description = json['description'];
+    time = json['time'];
   }
 
   Map<String, dynamic> toJson(){

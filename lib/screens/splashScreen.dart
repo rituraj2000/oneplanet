@@ -17,6 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    APIs.getSelfInfo();
     Future.delayed(const Duration(milliseconds: 3500), () async {
 
       User? currentUser = APIs.auth.currentUser;

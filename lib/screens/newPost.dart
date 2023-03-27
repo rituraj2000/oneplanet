@@ -1,10 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_oneplanet/theme/colors.dart';
+import '../apis/apis.dart';
+import '../models/post_model.dart';
+import '../models/user_model.dart';
 
 class NewPost extends StatefulWidget {
-  const NewPost({Key? key}) : super(key: key);
+  final UserModel currentUser;
+  const NewPost({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<NewPost> createState() => _NewPostState();
@@ -12,15 +18,71 @@ class NewPost extends StatefulWidget {
 
 class _NewPostState extends State<NewPost> {
 
+
+  void sendMessage() async {
+    String msg = descriptionController.text.trim();
+    descriptionController.clear();
+
+    final nowTime = DateTime.now().millisecondsSinceEpoch.toString();
+
+    if (msg != "") {
+      // Send the message
+      PostModel newMessage = PostModel(
+        time: nowTime,
+        byid: APIs.user.uid,
+        purpose: dropdownvalue,
+        description: msg,
+      );
+
+      ///Setting the message inside messages collection in chatroom
+
+      await APIs.firestore
+          .collection("posts")
+          .doc(newMessage.time)
+          .set(newMessage.toJson());
+
+      /// Adding Points
+
+      int currentPoint = int.parse(widget.currentUser.points!);
+      int currentDrives = int.parse(widget.currentUser.drives!);
+
+      await APIs.firestore
+          .collection("users")
+          .doc(APIs.user.uid)
+          .update({
+        'points': "${currentPoint+5}",
+        'drives': "${currentDrives+1}",
+      });
+
+      showDialog(context: context, builder: (BuildContext context){
+        return const AlertDialog(
+          title: Text("Wohoo Post Sent!"),
+          content: Text("5 Points Added!"),
+        );
+      });
+
+      log("Message sent to db");
+    } else {
+      showDialog(context: context, builder: (BuildContext context){
+        return const AlertDialog(
+          title: Text("Oops!"),
+          content: Text("Make Sure Post is valid"),
+        );
+      });
+    }
+  }
+
+  TextEditingController descriptionController = TextEditingController();
+
   // Initial Selected Value
-  String dropdownvalue = 'Item 1';
+  String dropdownvalue = 'Plantation';
 
   // List of items in our dropdown menu
   var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
+    'Plantation',
+    'Beach Clean',
+    'Food',
+    'Books',
     'Item 5',
   ];
 
@@ -85,7 +147,9 @@ class _NewPostState extends State<NewPost> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      sendMessage();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       elevation: 1,
@@ -125,6 +189,7 @@ class _NewPostState extends State<NewPost> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: descriptionController,
                       keyboardType: TextInputType.multiline,
                       style: Theme.of(context)
                           .textTheme

@@ -9,6 +9,9 @@ import 'package:project_oneplanet/screens/homePage.dart';
 import 'package:project_oneplanet/screens/mapPage.dart';
 import 'package:project_oneplanet/screens/newPost.dart';
 import 'package:project_oneplanet/theme/colors.dart';
+import '../apis/apis.dart';
+import '../helper/firebase_helper.dart';
+import '../models/user_model.dart';
 
 class LandingPage extends StatefulWidget {
   final User currentUser;
@@ -20,6 +23,14 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage>
     with TickerProviderStateMixin {
+
+  UserModel? currentUserModel;
+
+  Future<void> get() async {
+    currentUserModel =
+    await FirebaseHelper.getUserModelById(widget.currentUser.uid);
+  }
+
   var _bottomNavIndex = 0; //default index of a first screen
 
   late AnimationController _fabAnimationController;
@@ -133,12 +144,14 @@ class _LandingPageState extends State<LandingPage>
           _borderRadiusAnimationController.reset();
           _borderRadiusAnimationController.forward();
           _fabAnimationController.forward();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NewPost(),
-            ),
-          );
+          APIs.getSelfInfo().then((value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>  NewPost(currentUser: APIs.myCurrentUser),
+              ),
+            );
+          });
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
