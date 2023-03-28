@@ -22,18 +22,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           "OnePlanet",
-          style: Theme.of(context).textTheme.headline1!.copyWith(color: AppColors.kDarkGreen),
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(color: AppColors.kDarkGreen),
         ),
       ),
       body: StreamBuilder(
           stream: APIs.firestore
-              .collection("posts")
-              .orderBy("time", descending: true)
+              .collection("events")
+              .orderBy('date', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
-
-            ///Data is loading
+              ///Data is loading
               case ConnectionState.waiting:
                 return const SizedBox();
               case ConnectionState.none:
@@ -47,14 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
 
-            ///If some or all data is loaded
+              ///If some or all data is loaded
               case ConnectionState.active:
               case ConnectionState.done:
                 final data = snapshot.data?.docs;
-                list = data
-                    ?.map((e) => PostModel.fromJson(e.data()))
-                    .toList() ??
-                    [];
+                list =
+                    data?.map((e) => PostModel.fromJson(e.data())).toList() ??
+                        [];
 
                 if (list.isNotEmpty) {
                   return ListView.builder(
@@ -63,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: list.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 15),
                           child: FeedCard(currentPost: list[index]),
                         );
                       });

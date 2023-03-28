@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:project_oneplanet/screens/accountPage.dart';
-import 'package:project_oneplanet/screens/chatPage.dart';
+import 'package:project_oneplanet/screens/Account/accountPage.dart';
+import 'package:project_oneplanet/screens/Chat%20Rooms/event_chat_room.dart';
+import 'Chat Rooms/event_chat_room.dart';
+import 'package:project_oneplanet/screens/Map%20_and_Event%20Details/mapScreen.dart';
 import 'package:project_oneplanet/screens/homePage.dart';
-import 'package:project_oneplanet/screens/mapPage.dart';
-import 'package:project_oneplanet/screens/newPost.dart';
+import 'package:project_oneplanet/screens/New_Post/newPost.dart';
 import 'package:project_oneplanet/theme/colors.dart';
 import '../apis/apis.dart';
 import '../helper/firebase_helper.dart';
@@ -23,12 +24,11 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage>
     with TickerProviderStateMixin {
-
   UserModel? currentUserModel;
 
   Future<void> get() async {
     currentUserModel =
-    await FirebaseHelper.getUserModelById(widget.currentUser.uid);
+        await FirebaseHelper.getUserModelById(widget.currentUser.uid);
   }
 
   var _bottomNavIndex = 0; //default index of a first screen
@@ -127,10 +127,12 @@ class _LandingPageState extends State<LandingPage>
         MapScreen(),
 
         ///Chat Page
-        ChatScreen(),
+        EventChatRoom(),
 
         ///Account page
-        AccountPage(currentUser: widget.currentUser,),
+        AccountPage(
+          currentUser: widget.currentUser,
+        ),
       ].elementAt(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.kDarkGreen,
@@ -148,7 +150,7 @@ class _LandingPageState extends State<LandingPage>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>  NewPost(currentUser: APIs.myCurrentUser),
+                builder: (context) => NewPost(currentUser: APIs.myCurrentUser),
               ),
             );
           });
@@ -164,7 +166,7 @@ class _LandingPageState extends State<LandingPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                isActive ? boldIconList[index]:iconList[index],
+                isActive ? boldIconList[index] : iconList[index],
                 size: 24,
                 color: color,
               ),

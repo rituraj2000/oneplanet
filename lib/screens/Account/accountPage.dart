@@ -6,7 +6,7 @@ import 'package:project_oneplanet/helper/firebase_helper.dart';
 import 'package:project_oneplanet/theme/colors.dart';
 import 'package:rive/rive.dart';
 
-import '../models/user_model.dart';
+import '../../models/user_model.dart';
 
 class AccountPage extends StatefulWidget {
   final User currentUser;
@@ -25,11 +25,12 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
-    rootBundle.load('assets/riveanimation/tree_demo.riv').then((data) async{
+    rootBundle.load('assets/riveanimation/tree_demo.riv').then((data) async {
       final file = RiveFile.import(data);
       final artboard = file.mainArtboard;
-      var controller = StateMachineController.fromArtboard(artboard, 'State Machine 1');
-      if(controller != null) {
+      var controller =
+          StateMachineController.fromArtboard(artboard, 'State Machine 1');
+      if (controller != null) {
         artboard.addController(controller);
         _progress = controller.findInput('input');
         setState(() {
@@ -41,13 +42,12 @@ class _AccountPageState extends State<AccountPage> {
 
     FirebaseHelper.getUserModelById(widget.currentUser.uid).then((value) {
       String currentPoint = value!.points ?? "";
-      if(currentPoint.isNotEmpty) {
+      if (currentPoint.isNotEmpty) {
         setState(() {
           _progress?.value = int.parse(currentPoint).toDouble();
         });
       }
     });
-
   }
 
   @override
@@ -118,10 +118,8 @@ class _AccountPageState extends State<AccountPage> {
           FutureBuilder(
             future: FirebaseHelper.getUserModelById(widget.currentUser.uid),
             builder: (ctx, userData) {
-              if (userData.connectionState ==
-                  ConnectionState.done) {
-                UserModel targetUser =
-                userData.data as UserModel;
+              if (userData.connectionState == ConnectionState.done) {
+                UserModel targetUser = userData.data as UserModel;
 
                 return Column(
                   children: [
@@ -134,7 +132,8 @@ class _AccountPageState extends State<AccountPage> {
                             Container(
                               height: 40,
                               width: 40,
-                              child: Image.asset('assets/images/reward_logo.png'),
+                              child:
+                                  Image.asset('assets/images/reward_logo.png'),
                             ),
                             SizedBox(
                               width: 10,
@@ -143,17 +142,22 @@ class _AccountPageState extends State<AccountPage> {
                               children: [
                                 Text(
                                   targetUser.points.toString(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.amber[600]),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                          color: Colors.amber[600]),
                                 ),
                                 Text(
                                   " Points",
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1!
-                                      .copyWith(fontSize: 22, color: AppColors.neutral90),
+                                      .copyWith(
+                                          fontSize: 22,
+                                          color: AppColors.neutral90),
                                 ),
                               ],
                             ),
@@ -182,8 +186,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     targetUser.globalrank.toString(),
@@ -191,9 +195,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -212,8 +216,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     targetUser.drives.toString(),
@@ -221,9 +225,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -242,8 +246,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     targetUser.lable.toString(),
@@ -251,9 +255,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -276,7 +280,8 @@ class _AccountPageState extends State<AccountPage> {
                             Container(
                               height: 40,
                               width: 40,
-                              child: Image.asset('assets/images/reward_logo.png'),
+                              child:
+                                  Image.asset('assets/images/reward_logo.png'),
                             ),
                             SizedBox(
                               width: 10,
@@ -285,17 +290,22 @@ class _AccountPageState extends State<AccountPage> {
                               children: [
                                 Text(
                                   "0",
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.amber[600]),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                          color: Colors.amber[600]),
                                 ),
                                 Text(
                                   " Points",
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1!
-                                      .copyWith(fontSize: 22, color: AppColors.neutral90),
+                                      .copyWith(
+                                          fontSize: 22,
+                                          color: AppColors.neutral90),
                                 ),
                               ],
                             ),
@@ -324,8 +334,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     "0",
@@ -333,9 +343,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -354,8 +364,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     "0",
@@ -363,9 +373,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -384,8 +394,8 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.kTextDarkGreen),
+                                            fontSize: 18,
+                                            color: AppColors.kTextDarkGreen),
                                   ),
                                   Text(
                                     "",
@@ -393,9 +403,9 @@ class _AccountPageState extends State<AccountPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                        fontSize: 18,
-                                        color: AppColors.neutral90,
-                                        fontWeight: FontWeight.w500),
+                                            fontSize: 18,
+                                            color: AppColors.neutral90,
+                                            fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -409,11 +419,13 @@ class _AccountPageState extends State<AccountPage> {
               }
             },
           ),
-          _riveArtboard!= null ? SizedBox(
-            width: 320,
-            height: 400,
-            child: Rive(artboard: _riveArtboard!),
-          ) : const SizedBox(),
+          _riveArtboard != null
+              ? SizedBox(
+                  width: 320,
+                  height: 400,
+                  child: Rive(artboard: _riveArtboard!),
+                )
+              : const SizedBox(),
         ],
       ),
     );
