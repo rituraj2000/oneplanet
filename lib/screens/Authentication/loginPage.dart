@@ -8,7 +8,7 @@ import 'package:project_oneplanet/apis/apis.dart';
 import 'package:project_oneplanet/screens/homePage.dart';
 import 'package:project_oneplanet/screens/landingPage.dart';
 
-import '../models/user_model.dart';
+import '../../models/user_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -33,25 +33,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      await APIs.auth.signInWithCredential(credential).then((value) async{
+      await APIs.auth.signInWithCredential(credential).then((value) async {
         APIs.user;
-        String id = APIs.user.uid;
+        String id = APIs.user!.uid;
 
         await APIs.firestore.collection('users').doc(id).get().then((value) {
-          if(value.exists) {
+          if (value.exists) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (_) => LandingPage(
-                  currentUser: APIs.user,
+                  currentUser: APIs.user!,
                 ),
               ),
             );
           } else {
             UserModel newUser = UserModel(
               id: id,
-              name: APIs.user.displayName,
-              photo: APIs.user.photoURL,
+              name: APIs.user!.displayName,
+              photo: APIs.user!.photoURL,
               points: "47",
               globalrank: "167",
               drives: "246",
@@ -69,14 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => LandingPage(
-                    currentUser: APIs.user,
+                    currentUser: APIs.user!,
                   ),
                 ),
               );
             });
           }
         });
-
       });
     } on FirebaseAuthException catch (e) {
       log("Oops, Somthing went wrong!! ${e.message}");

@@ -5,9 +5,9 @@ import 'package:project_oneplanet/screens/splashScreen.dart';
 import 'firebase_options.dart';
 import 'package:project_oneplanet/theme/base_theme.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _initializeFirebase();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Status bar transparent
   SystemChrome.setSystemUIOverlayStyle(
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 /// Initializing Firebase
-_initializeFirebase() async{
+_initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

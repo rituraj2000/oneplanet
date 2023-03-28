@@ -24,16 +24,17 @@ class _FeedCardState extends State<FeedCard> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            FutureBuilder(
-                future: FirebaseHelper.getUserModelById(widget.currentPost.byid!),
-                builder: (context, userData) {
-                  if (userData.connectionState == ConnectionState.done) {
-                    UserModel targetUser = userData.data as UserModel;
-                    return Text(targetUser.name!);
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
+            // FutureBuilder(
+            //     future:
+            //         FirebaseHelper.getUserModelById(widget.currentPost.byid!),
+            //     builder: (context, userData) {
+            //       if (userData.connectionState == ConnectionState.done) {
+            //         UserModel targetUser = userData.data as UserModel;
+            //         return Text("targetUser.name!");
+            //       } else {
+            //         return const SizedBox();
+            //       }
+            //     }),
             Text(widget.currentPost.purpose ?? "Purpose"),
             Text(widget.currentPost.description ?? "description"),
           ],

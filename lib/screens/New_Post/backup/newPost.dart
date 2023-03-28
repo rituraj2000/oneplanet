@@ -17,8 +17,6 @@ class NewPost extends StatefulWidget {
 }
 
 class _NewPostState extends State<NewPost> {
-
-
   void sendMessage() async {
     String msg = descriptionController.text.trim();
     descriptionController.clear();
@@ -46,29 +44,30 @@ class _NewPostState extends State<NewPost> {
       int currentPoint = int.parse(widget.currentUser.points!);
       int currentDrives = int.parse(widget.currentUser.drives!);
 
-      await APIs.firestore
-          .collection("users")
-          .doc(APIs.user.uid)
-          .update({
-        'points': "${currentPoint+5}",
-        'drives': "${currentDrives+1}",
+      await APIs.firestore.collection("users").doc(APIs.user.uid).update({
+        'points': "${currentPoint + 5}",
+        'drives': "${currentDrives + 1}",
       });
 
-      showDialog(context: context, builder: (BuildContext context){
-        return const AlertDialog(
-          title: Text("Wohoo Post Sent!"),
-          content: Text("5 Points Added!"),
-        );
-      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text("Wohoo Post Sent!"),
+              content: Text("5 Points Added!"),
+            );
+          });
 
       log("Message sent to db");
     } else {
-      showDialog(context: context, builder: (BuildContext context){
-        return const AlertDialog(
-          title: Text("Oops!"),
-          content: Text("Make Sure Post is valid"),
-        );
-      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text("Oops!"),
+              content: Text("Make Sure Post is valid"),
+            );
+          });
     }
   }
 
@@ -108,15 +107,13 @@ class _NewPostState extends State<NewPost> {
               child: Row(
                 children: [
                   Text(
-                     "Purpose :",
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1!
-                        .copyWith(
-                        fontSize: 20,
-                        color: AppColors.kTextDarkGreen),
+                    "Purpose :",
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        fontSize: 20, color: AppColors.kTextDarkGreen),
                   ),
-                  SizedBox(width: 12,),
+                  SizedBox(
+                    width: 12,
+                  ),
                   DropdownButton(
                     underline: SizedBox(),
 
@@ -156,15 +153,17 @@ class _NewPostState extends State<NewPost> {
                       shape: const StadiumBorder(),
                     ),
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
                       child: Text(
                         "Post",
                         style: GoogleFonts.poppins(
                             fontSize: 19, fontWeight: FontWeight.w500),
                       ),
                     )),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
               ],
             ),
           ],
@@ -199,10 +198,10 @@ class _NewPostState extends State<NewPost> {
                       decoration: InputDecoration(
                         hintText: 'Write your stories \n and experiences here.',
                         hintStyle:
-                        Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: AppColors.kTextDarkGreen,
-                          fontSize: 17,
-                        ),
+                            Theme.of(context).textTheme.subtitle2!.copyWith(
+                                  color: AppColors.kTextDarkGreen,
+                                  fontSize: 17,
+                                ),
                         border: InputBorder.none,
                       ),
                     ),
@@ -215,5 +214,4 @@ class _NewPostState extends State<NewPost> {
       ),
     );
   }
-
 }
