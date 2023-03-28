@@ -373,7 +373,7 @@ class _NewPostState extends State<NewPost> {
             padding: EdgeInsets.only(top: height * 0.03, bottom: height * 0.09),
             children: [
               Text(
-                "Pick Profile Picture",
+                "Pick Image From",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
                     fontSize: 20,
