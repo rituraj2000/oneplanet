@@ -9,6 +9,7 @@ class Event {
   final String lat;
   final String lon;
   final String date;
+  final String eventTime;
   final String type;
 
   const Event({
@@ -20,6 +21,7 @@ class Event {
     required this.lat,
     required this.lon,
     required this.date,
+    required this.eventTime,
     required this.type,
   });
 
@@ -34,6 +36,7 @@ class Event {
       lat: snapshot['lat'],
       lon: snapshot['lon'],
       date: snapshot['date'],
+      eventTime: snapshot['eventtime'],
       type: snapshot['type'],
       location: snapshot['location'],
     );
@@ -47,6 +50,7 @@ class Event {
         "lon": lon,
         "eventID": eventID,
         "date": date,
+        "eventtime": eventTime,
         "type": type,
         "location": location,
       };

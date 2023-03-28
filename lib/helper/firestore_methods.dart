@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
-import '../Models//Event.dart';
+
+import '../models/Event.dart';
+
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -16,6 +18,7 @@ class FirestoreMethods {
     String lat,
     String lon,
     String type,
+    String eventTime,
   ) async {
     String res = "";
 
@@ -32,6 +35,7 @@ class FirestoreMethods {
         date: date,
         type: type,
         location: location,
+        eventTime: eventTime,
       );
       _firestore.collection('events').doc(eventID).set(event.toJson());
       res = "successfully scheduled new event";

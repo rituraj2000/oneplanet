@@ -4,9 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_oneplanet/theme/colors.dart';
-import '../apis/apis.dart';
-import '../models/post_model.dart';
-import '../models/user_model.dart';
+import '../../../apis/apis.dart';
+import '../../../models/post_model.dart';
+import '../../../models/user_model.dart';
+
 
 class NewPost extends StatefulWidget {
   final UserModel currentUser;
@@ -27,7 +28,7 @@ class _NewPostState extends State<NewPost> {
       // Send the message
       PostModel newMessage = PostModel(
         time: nowTime,
-        byid: APIs.user.uid,
+        byid: APIs.user!.uid,
         purpose: dropdownvalue,
         description: msg,
       );
@@ -44,7 +45,7 @@ class _NewPostState extends State<NewPost> {
       int currentPoint = int.parse(widget.currentUser.points!);
       int currentDrives = int.parse(widget.currentUser.drives!);
 
-      await APIs.firestore.collection("users").doc(APIs.user.uid).update({
+      await APIs.firestore.collection("users").doc(APIs.user!.uid).update({
         'points': "${currentPoint + 5}",
         'drives': "${currentDrives + 1}",
       });

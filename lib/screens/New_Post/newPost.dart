@@ -60,22 +60,71 @@ class _NewPostState extends State<NewPost> {
   @override
   Widget build(BuildContext context) {
     void _scheduleEvent() async {
-      try {
-        await getLocation(_locationController.text);
-        String res = await FirestoreMethods().uploadScheduledEvent(
-          _titleController.text,
-          DateTime.now().microsecondsSinceEpoch.toString(),
-          _descriptionController.text.trim(),
-          DateTime.now().millisecondsSinceEpoch.toString(),
-          _locationController.text.trim(),
-          _location_cordinates.latitude.toString(),
-          _location_cordinates.longitude.toString(),
-          "climate_action",
-        );
+      String msg = _titleController.text.trim();
 
-        Navigator.pop(context);
-      } catch (e) {
-        print(e.toString());
+      final nowTime = DateTime.now().millisecondsSinceEpoch.toString();
+
+      if (msg != "" &&
+          _locationController.text.trim() != "" &&
+          _descriptionController.text.trim() != "") {
+        // Send the message
+
+        try {
+          await getLocation(_locationController.text);
+          await FirestoreMethods()
+              .uploadScheduledEvent(
+            _titleController.text,
+            nowTime,
+            _descriptionController.text.trim(),
+            nowTime,
+            _locationController.text.trim(),
+            _location_cordinates.latitude.toString(),
+            _location_cordinates.longitude.toString(),
+            dropdownvalue,
+            "2 October 2021"
+          ).then((value) async{
+            /// Adding Points
+
+            int currentPoint = int.parse(widget.currentUser.points!);
+            int currentDrives = int.parse(widget.currentUser.drives!);
+
+            await APIs.firestore.collection("users").doc(APIs.user!.uid).update({
+              'points': "${currentPoint + 5}",
+              'drives': "${currentDrives + 1}",
+            }).then((value) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text("Wohoo Post Sent!"),
+                      content: Text("5 Points Added!"),
+                    );
+                  }).then((value) {
+                /// Clean it at end
+                _titleController.clear();
+                _descriptionController.clear();
+                _locationController.clear();
+                Future.delayed(const Duration(milliseconds: 800), () {
+                  Navigator.pop(context);
+                });
+              });
+            });
+          });
+        } catch (e) {
+          print(e.toString());
+        }
+
+
+        log("Message sent to db");
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertDialog(
+                title: Text("Oops!"),
+                content: Text("Make Sure Post is valid"),
+              );
+            });
       }
     }
 
@@ -93,6 +142,7 @@ class _NewPostState extends State<NewPost> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Row(
