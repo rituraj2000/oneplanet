@@ -11,6 +11,7 @@ class Event {
   final String date;
   final String eventTime;
   final String type;
+  final String photo;
 
   const Event({
     required this.userID,
@@ -23,6 +24,7 @@ class Event {
     required this.date,
     required this.eventTime,
     required this.type,
+    required this.photo,
   });
 
   static Event fromSnap(DocumentSnapshot snap) {
@@ -39,6 +41,7 @@ class Event {
       eventTime: snapshot['eventtime'],
       type: snapshot['type'],
       location: snapshot['location'],
+      photo: snapshot['photo'],
     );
   }
 
@@ -53,5 +56,6 @@ class Event {
         "eventtime": eventTime,
         "type": type,
         "location": location,
+        "photo": photo,
       };
 }
