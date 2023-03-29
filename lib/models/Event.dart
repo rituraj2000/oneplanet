@@ -13,7 +13,7 @@ class Event {
   final String type;
   final String photo;
 
-  const Event({
+   Event({
     required this.userID,
     required this.eventID,
     required this.title,
@@ -44,6 +44,7 @@ class Event {
       photo: snapshot['photo'],
     );
   }
+
 
   Map<String, dynamic> toJson() => {
         "userID": userID,

@@ -1,23 +1,30 @@
 class PostModel{
-  String? byid;
-  String? purpose;
+  String? userID;
+  String? eventID;
+  String? title;
   String? description;
-  String? time;
+  String? location;
+  String? lat;
+  String? lon;
+  String? date;
+  String? eventTime;
+  String? type;
+  String? photo;
 
-  PostModel({this.byid, this.purpose, this.time, this.description,});
+
+  PostModel({this.userID, this.eventID, this.title, this.description, this.location, this.lat, this.lon, this.date, this.eventTime, this.type, this.photo});
   PostModel.fromJson(Map<String,dynamic> json){
-    byid = json['byid'];
-    purpose = json['purpose'];
+    userID = json['userID'];
+    title = json['title'];
     description = json['description'];
-    time = json['time'];
+    lat = json['lat'];
+    lon = json['lon'];
+    eventID = json['eventID'];
+    date = json['date'];
+    eventTime = json['eventtime'];
+    type = json['type'];
+    location = json['location'];
+    photo = json['photo'];
   }
 
-  Map<String, dynamic> toJson(){
-    final data = <String, dynamic>{};
-    data['byid'] = byid;
-    data['purpose'] = purpose;
-    data['description'] = description;
-    data['time'] = time;
-    return data;
-  }
 }

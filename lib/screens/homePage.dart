@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
+                              left: 15, right: 15, bottom: 18),
                           child: FeedCard(currentPost: list[index]),
                         );
                       });
