@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_oneplanet/apis/apis.dart';
+import 'package:project_oneplanet/models/MessagesModel.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/Event.dart';
@@ -25,7 +27,7 @@ class FirestoreMethods {
     try {
       //String eventIDd = const Uuid().v1();
 
-      Event event = Event(
+      EventModel event = EventModel(
         userID: _firebaseAuth.currentUser!.uid,
         eventID: eventID,
         title: title,
@@ -47,20 +49,28 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<String> addUserToEventGroup(String userID, String eventID) async {
-    String res = "Failed to add to group";
-
+  Future<EventModel?> getEventById(String eventID) async {
+    EventModel? event;
     try {
-      // final eventDocs = await _firestore
-      //     .collection('users')
-      //     .doc(
-      //       userID.toString(),
-      //     )
-      //     .collection('my-events')
-      //     .get();
+      DocumentSnapshot docSnap =
+          await APIs.firestore.collection("events").doc(eventID).get();
 
-      // List<DocumentSnapshot> _myEventList = eventDocs.docs.toList();
+      if (docSnap.data() != null) {
+        event = EventModel.fromSnap(docSnap);
+      } else {
+        print("Failed!");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
 
+    return event;
+  }
+
+  Future<String> addUserToEventGroup(String eventID) async {
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    String res = "failed";
+    try {
       print(userID);
       _firestore.collection('users').doc(userID).update(
         {
@@ -69,6 +79,45 @@ class FirestoreMethods {
       );
 
       res = "success";
+    } catch (e) {
+      print(e.toString());
+    }
+    return res;
+  }
+
+  Future<List<EventModel>> getAllChatRoomsOfCurrentUser() async {
+    List<EventModel> _myEvents = [];
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      final userDetails =
+          await APIs.firestore.collection('users').doc(uid).get();
+      final events = userDetails.data()!['my-events'];
+
+      for (var event in events) {
+        final eventDetails =
+            await APIs.firestore.collection('events').doc(event).get();
+
+        _myEvents.add(EventModel.fromSnap(eventDetails));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return _myEvents;
+  }
+
+  Future<String> sendMessage(String msg, String eventId) async {
+    String res = "failed";
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      await APIs.firestore
+          .collection('messages')
+          .doc(DateTime.now().microsecondsSinceEpoch.toString())
+          .set(
+            MessageModel(from: uid, message: msg, eventId: eventId).toJson(),
+          );
+      res = "successfull";
     } catch (e) {
       print(e.toString());
     }

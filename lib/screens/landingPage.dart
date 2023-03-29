@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:project_oneplanet/screens/Account/accountPage.dart';
 import 'package:project_oneplanet/screens/Chat%20Rooms/event_chat_room.dart';
+import 'package:project_oneplanet/screens/Chat%20Rooms/user_chat_room_list.dart';
 import 'Chat Rooms/event_chat_room.dart';
 import 'package:project_oneplanet/screens/Map%20_and_Event%20Details/mapScreen.dart';
 import 'package:project_oneplanet/screens/homePage.dart';
@@ -127,7 +128,7 @@ class _LandingPageState extends State<LandingPage>
         MapScreen(),
 
         ///Chat Page
-        EventChatRoom(),
+        ChatRoomList(),
 
         ///Account page
         AccountPage(
