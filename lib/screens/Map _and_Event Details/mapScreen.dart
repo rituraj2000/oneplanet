@@ -17,25 +17,36 @@ class _MapScreenState extends State<MapScreen> {
     target: LatLng(30, 30),
   );
 
-  //Google Maps Marker
-  BitmapDescriptor customMarker = BitmapDescriptor.defaultMarker;
+  //Custom Google Maps Markers
+  BitmapDescriptor _customIcon_Food_Donation = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _customIconPlantation = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _customIcon_Climate_Action = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _customIcon_Life_on_Land = BitmapDescriptor.defaultMarker;
 
-  void _setMarker() {
+  void setCustomIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/images/food_donation_icon.png")
+        .then((icon) {
+      _customIcon_Food_Donation = icon;
+    });
+
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/images/live_on_land.png")
+        .then((icon) {
+      _customIconPlantation = icon;
+    });
+
     BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, "assets/images/climate_action.png")
         .then((icon) {
-      customMarker = icon;
+      _customIcon_Climate_Action = icon;
     });
-  }
 
-  BitmapDescriptor _customIcon(String type) {
-    BitmapDescriptor customIcon = BitmapDescriptor.defaultMarker;
     BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/images/climate_action.png")
+            ImageConfiguration.empty, "assets/images/live_on_land.png")
         .then((icon) {
-      customMarker = icon;
+      _customIcon_Life_on_Land = icon;
     });
-    return customIcon;
   }
 
   void getCurrentLocation() async {
@@ -52,15 +63,13 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 14.0,
         );
       });
-
-      print(_currentPosition);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _setMarker();
+    setCustomIcon();
     getCurrentLocation();
   }
 
@@ -83,26 +92,69 @@ class _MapScreenState extends State<MapScreen> {
             var lat = double.parse(doc['lat']);
             var lon = double.parse(doc['lon']);
             var type = doc['type'];
-            print("${lat}, ${lon}");
+            var eventID = doc['eventID'];
+            var title = doc['title'];
 
-            var marker = Marker(
-              markerId: MarkerId(doc.id),
-              position: LatLng(lat, lon),
-              icon: customMarker,
-              infoWindow: InfoWindow(title: doc['title']),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EventDetailsScreen(
-                      eventID: "85d93410-cc14-11ed-8919-6b67cf216ad3",
+            print("${lat}, ${lon}, ${title}");
+
+            if (type.toString().toLowerCase().contains('food')) {
+              var marker = Marker(
+                markerId: MarkerId(doc.id),
+                position: LatLng(lat, lon),
+                icon: _customIcon_Food_Donation,
+                infoWindow: InfoWindow(title: doc['title']),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EventDetailsScreen(
+                        eventID: eventID,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
+                },
+              );
 
-            _set.add(marker);
+              _set.add(marker);
+            } else if (type == 'cleanliness') {
+              var marker = Marker(
+                markerId: MarkerId(doc.id),
+                position: LatLng(lat, lon),
+                icon: _customIcon_Climate_Action,
+                infoWindow: InfoWindow(title: doc['title']),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EventDetailsScreen(
+                        eventID: eventID,
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              _set.add(marker);
+            } else if (type == 'life_on_land' || type == 'life-on-land') {
+              var marker = Marker(
+                markerId: MarkerId(doc.id),
+                position: LatLng(lat, lon),
+                icon: _customIcon_Life_on_Land,
+                infoWindow: InfoWindow(title: doc['title']),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EventDetailsScreen(
+                        eventID: eventID,
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              _set.add(marker);
+            }
           }
 
           return GoogleMap(
