@@ -36,13 +36,13 @@ class _NewPostState extends State<NewPost> {
   LatLng _location_cordinates = LatLng(30, 30);
 
   var items = [
-    'Plantation',
-    'Beach Clean',
-    'Food',
-    'Books',
-    'Item 5',
+    'donation',
+    'cleanliness',
+    'sustainable-cities',
+    'life-on-land',
   ];
-  String dropdownvalue = 'Plantation';
+
+  String dropdownvalue = 'life-on-land';
 
   //Functions : Scheduling a New Event
   Future<void> getLocation(String locationName) async {
@@ -57,11 +57,8 @@ class _NewPostState extends State<NewPost> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -89,13 +86,17 @@ class _NewPostState extends State<NewPost> {
             dropdownvalue,
             date.millisecondsSinceEpoch.toString(),
             imageURL,
-          ).then((value) async{
+          )
+              .then((value) async {
             /// Adding Points
 
             int currentPoint = int.parse(widget.currentUser.points!);
             int currentDrives = int.parse(widget.currentUser.drives!);
 
-            await APIs.firestore.collection("users").doc(APIs.user!.uid).update({
+            await APIs.firestore
+                .collection("users")
+                .doc(APIs.user!.uid)
+                .update({
               'points': "${currentPoint + 5}",
               'drives': "${currentDrives + 1}",
             }).then((value) {
@@ -120,7 +121,6 @@ class _NewPostState extends State<NewPost> {
         } catch (e) {
           print(e.toString());
         }
-
 
         log("Message sent to db");
       } else {
@@ -192,7 +192,9 @@ class _NewPostState extends State<NewPost> {
                     ),
                   ),
 
-                  SizedBox(height: 6,),
+                  SizedBox(
+                    height: 6,
+                  ),
                   //Calendar Button
                   Padding(
                     padding: const EdgeInsets.only(top: 1, left: 8),
@@ -213,13 +215,11 @@ class _NewPostState extends State<NewPost> {
                         // ),
                         Text(
                           "${DateFormat.yMMMEd().format(date)}  ${DateFormat.jm().format(date)}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(
-                            fontSize: 16.5,
-                              color: AppColors.kTextDarkGreen,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.subtitle1!.copyWith(
+                                    fontSize: 16.5,
+                                    color: AppColors.kTextDarkGreen,
+                                  ),
                           maxLines: null,
                         ),
                         SizedBox(
@@ -233,13 +233,15 @@ class _NewPostState extends State<NewPost> {
                                 showTitleActions: true,
                                 minTime: DateTime(1960),
                                 maxTime: DateTime(2050), onChanged: (date) {
-                                  newDate = date;
-                                }, onConfirm: (date) {
-                                  newDate = date;
-                                  setState(() {
-                                    this.date = newDate;
-                                  });
-                                }, currentTime: DateTime.now(), locale: LocaleType.en);
+                              newDate = date;
+                            }, onConfirm: (date) {
+                              newDate = date;
+                              setState(() {
+                                this.date = newDate;
+                              });
+                            },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.en);
                           },
                           child: Icon(Icons.calendar_month_sharp, size: 15),
                           style: ElevatedButton.styleFrom(
@@ -255,37 +257,39 @@ class _NewPostState extends State<NewPost> {
               ),
 
               //Photo Input
-              image == null ? GestureDetector(
-                onTap: () {
-                  showBottomSheet(screenHeight);
-                },
-                child: Container(
-                  height: 300,
-                  width: screenWidth,
-                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+              image == null
+                  ? GestureDetector(
+                      onTap: () {
+                        showBottomSheet(screenHeight);
+                      },
+                      child: Container(
+                        height: 300,
+                        width: screenWidth,
+                        margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.1),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add_a_photo,
+                          color: Colors.black.withOpacity(0.4),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.file(
+                          File(image!),
+                          width: screenWidth,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Icon(
-                    Icons.add_a_photo,
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-              ) : Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.file(
-                    File(image!),
-                    width: screenWidth,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
               chatInput(
                   hint: 'Title',
                   minLines: 1,
@@ -334,13 +338,13 @@ class _NewPostState extends State<NewPost> {
     );
   }
 
-
   //Update Profile Picture
-   Future<void> updateProfilePicture(File file) async {
+  Future<void> updateProfilePicture(File file) async {
     //image file extension
     final ext = file.path.split('.').last;
     //storage file reference path
-    final ref = APIs.storage.ref().child('profile_pictures/${date.millisecondsSinceEpoch.toString()}.$ext');
+    final ref = APIs.storage.ref().child(
+        'profile_pictures/${date.millisecondsSinceEpoch.toString()}.$ext');
 
     //Uploading Image
     await ref
@@ -478,7 +482,6 @@ class _NewPostState extends State<NewPost> {
           );
         });
   }
-
 
   Widget chatInput(
       {required String hint,
