@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Event {
+class EventModel {
   final String userID;
   final String eventID;
   final String title;
@@ -13,7 +13,7 @@ class Event {
   final String type;
   final String photo;
 
-   Event({
+  EventModel({
     required this.userID,
     required this.eventID,
     required this.title,
@@ -27,10 +27,10 @@ class Event {
     required this.photo,
   });
 
-  static Event fromSnap(DocumentSnapshot snap) {
+  static EventModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
-    return Event(
+    return EventModel(
       userID: snapshot['userID'],
       eventID: snapshot['eventID'],
       title: snapshot['title'],
@@ -44,7 +44,6 @@ class Event {
       photo: snapshot['photo'],
     );
   }
-
 
   Map<String, dynamic> toJson() => {
         "userID": userID,

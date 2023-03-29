@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:project_oneplanet/models/Event.dart';
 import '../../helper/firestore_methods.dart';
 import 'package:project_oneplanet/screens/Chat%20Rooms/event_chat_room.dart';
 
@@ -42,7 +45,8 @@ class JoinButton extends StatelessWidget {
 }
 
 class EventDateWidget extends StatelessWidget {
-  const EventDateWidget({super.key});
+  final String eventDate;
+  EventDateWidget({required this.eventDate});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,7 @@ class EventDateWidget extends StatelessWidget {
         ),
         const SizedBox(width: 10.0),
         Text(
-          'April 1, 2023',
+          '${eventDate}',
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.bold,
@@ -69,7 +73,9 @@ class EventDateWidget extends StatelessWidget {
 }
 
 class EventLocationWidget extends StatelessWidget {
-  const EventLocationWidget({super.key});
+  final String locationName;
+
+  EventLocationWidget({required this.locationName});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +88,7 @@ class EventLocationWidget extends StatelessWidget {
         ),
         const SizedBox(width: 10.0),
         Text(
-          'Awantika Colony',
+          locationName,
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.bold,
@@ -96,15 +102,16 @@ class EventLocationWidget extends StatelessWidget {
 }
 
 class EventTitle extends StatelessWidget {
-  const EventTitle({super.key});
+  final String title;
+  EventTitle({required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Event Name',
+        Text(
+          '${title}',
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
@@ -125,17 +132,21 @@ class EventTitle extends StatelessWidget {
   }
 }
 
-class EventDetailsScreen extends StatelessWidget {
+class EventDetailsScreen extends StatefulWidget {
   final String eventID;
 
   EventDetailsScreen({required this.eventID});
 
+  @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
   void _joinGroup(BuildContext ctx) async {
     String userID = await FirebaseAuth.instance.currentUser!.uid;
 
     try {
-      String res = await FirestoreMethods()
-          .addUserToEventGroup("dvGz9YudHKRcuIn2l3wS2s3jBts2", eventID);
+      String res = await FirestoreMethods().addUserToEventGroup(widget.eventID);
 
       if (res == "success") {
         Navigator.push(
@@ -148,6 +159,19 @@ class EventDetailsScreen extends StatelessWidget {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  EventModel? event;
+
+  void _setCurrentEvent() async {
+    event = await FirestoreMethods().getEventById(widget.eventID);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setCurrentEvent();
   }
 
   @override
@@ -182,7 +206,7 @@ class EventDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      EventTitle(),
+                      EventTitle(title: event != null ? event!.title : "NULL"),
                       JoinButton(ontTap: () {
                         _joinGroup(context);
                       }),
@@ -191,8 +215,11 @@ class EventDetailsScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      EventLocationWidget(),
-                      EventDateWidget(),
+                      EventLocationWidget(
+                          locationName:
+                              event != null ? event!.location : "NULL"),
+                      EventDateWidget(
+                          eventDate: event != null ? event!.date : "NULL"),
                     ],
                   ),
                 ],
@@ -202,12 +229,14 @@ class EventDetailsScreen extends StatelessWidget {
           Expanded(
             flex: 6,
             child: Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: Text(
-                "Victoria Beckham brought the glamour to a fast food drive-thru as she treated sons Romeo and Cruz to an an In-N-Out Burger in Los Angeles on Thursday. Mail Online, 5 November 2019.",
+                event != null ? event!.description : "NULL",
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
               ),
             ),
           ),

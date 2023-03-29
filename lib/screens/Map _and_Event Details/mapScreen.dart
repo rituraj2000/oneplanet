@@ -63,8 +63,6 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 14.0,
         );
       });
-
-      print(_currentPosition);
     }
   }
 
@@ -96,7 +94,7 @@ class _MapScreenState extends State<MapScreen> {
             var type = doc['type'];
             var eventID = doc['eventID'];
 
-            print("${lat}, ${lon}, ${eventID}");
+            print("${lat}, ${lon}, ${type}");
 
             if (type.toString().toLowerCase().contains('food')) {
               var marker = Marker(
@@ -117,7 +115,7 @@ class _MapScreenState extends State<MapScreen> {
               );
 
               _set.add(marker);
-            } else if (type == 'climate_action') {
+            } else if (type == 'cleanliness') {
               var marker = Marker(
                 markerId: MarkerId(doc.id),
                 position: LatLng(lat, lon),
@@ -136,7 +134,7 @@ class _MapScreenState extends State<MapScreen> {
               );
 
               _set.add(marker);
-            } else if (type == 'life_on_land' || type == 'Plantation') {
+            } else if (type == 'life_on_land' || type == 'life-on-land') {
               var marker = Marker(
                 markerId: MarkerId(doc.id),
                 position: LatLng(lat, lon),

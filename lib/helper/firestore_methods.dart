@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project_oneplanet/apis/apis.dart';
@@ -19,12 +17,12 @@ class FirestoreMethods {
     String lat,
     String lon,
     String type,
+    String eventTime,
+    String photo,
   ) async {
     String res = "";
 
     try {
-      //String eventIDd = const Uuid().v1();
-
       EventModel event = EventModel(
         userID: _firebaseAuth.currentUser!.uid,
         eventID: eventID,
@@ -35,6 +33,8 @@ class FirestoreMethods {
         date: date,
         type: type,
         location: location,
+        photo: photo,
+        eventTime: eventTime,
       );
       _firestore.collection('events').doc(eventID).set(event.toJson());
       res = "successfully scheduled new event";

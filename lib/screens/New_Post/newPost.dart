@@ -69,8 +69,6 @@ class _NewPostState extends State<NewPost> {
       if (msg != "" &&
           _locationController.text.trim() != "" &&
           _descriptionController.text.trim() != "") {
-        // Send the message
-
         try {
           await getLocation(_locationController.text);
           await FirestoreMethods()
@@ -87,8 +85,6 @@ class _NewPostState extends State<NewPost> {
             imageURL,
           )
               .then((value) async {
-            /// Adding Points
-
             int currentPoint = int.parse(widget.currentUser.points!);
             int currentDrives = int.parse(widget.currentUser.drives!);
 
