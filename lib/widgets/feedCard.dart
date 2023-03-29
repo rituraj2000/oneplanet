@@ -40,21 +40,21 @@ class _FeedCardState extends State<FeedCard> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(9.6),
-              child: CachedNetworkImage(
-                height: 300,
-                width: double.maxFinite,
-                imageUrl: widget.currentPost.photo ??
-                    "https://cdn.dribbble.com/users/306504/screenshots/11602103/media/fcf2ee9ff42aa4ec7ddad101a99831c9.gif",
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: SizedBox(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+              // child: CachedNetworkImage(
+              //   height: 300,
+              //   width: double.maxFinite,
+              //   imageUrl: widget.currentPost.photo ??
+              //       "https://cdn.dribbble.com/users/306504/screenshots/11602103/media/fcf2ee9ff42aa4ec7ddad101a99831c9.gif",
+              //   fit: BoxFit.cover,
+              //   placeholder: (context, url) => const Center(
+              //     child: SizedBox(
+              //       width: 20.0,
+              //       height: 20.0,
+              //       child: CircularProgressIndicator(),
+              //     ),
+              //   ),
+              //   errorWidget: (context, url, error) => const Icon(Icons.error),
+              // ),
             ),
             SizedBox(
               height: 12,
@@ -114,34 +114,33 @@ class _FeedCardState extends State<FeedCard> {
                     }),
                 SizedBox(
                   width: 300,
-                  child: Text(widget.currentPost.title ?? "Title",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(
-                      fontSize: 18,
-                      color: AppColors.kDarkGreen,
-                    ),
+                  child: Text(
+                    widget.currentPost.title ?? "Title",
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 18,
+                          color: AppColors.kDarkGreen,
+                        ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                 ),
-                SizedBox(height: 3.4,),
+                SizedBox(
+                  height: 3.4,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kCardTagGreen,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.5, horizontal: 8),
-                    child: Text(widget.currentPost.type ?? "Purpose",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(
-                        fontSize: 15.5,
-                        color: AppColors.white,
-                      ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.5, horizontal: 8),
+                    child: Text(
+                      widget.currentPost.type ?? "Purpose",
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontSize: 15.5,
+                            color: AppColors.white,
+                          ),
                     ),
                   ),
                 ),
@@ -150,25 +149,37 @@ class _FeedCardState extends State<FeedCard> {
                 ),
                 Row(
                   children: [
-                    Icon(Icons.location_on_outlined, color: AppColors.kDarkGreen, size: 20,),
-                    SizedBox(width: 3,),
-                    Text(widget.currentPost.location ?? "Location",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(
-                        fontSize: 14.5,
-                        color: AppColors.kTextDarkGreen,
-                      ),
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: AppColors.kDarkGreen,
+                      size: 20,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      widget.currentPost.location ?? "Location",
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontSize: 14.5,
+                            color: AppColors.kTextDarkGreen,
+                          ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.calendar_today_outlined, color: AppColors.kDarkGreen, size: 18,),
-                    SizedBox(width: 4,),
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      color: AppColors.kDarkGreen,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
                     Text(
-                      "${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}  ${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}",
+                      // "${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}  ${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}",
+
+                      "Date",
                       style: Theme.of(context).textTheme.subtitle1!.copyWith(
                             fontSize: 14.5,
                             color: AppColors.kTextDarkGreen,
