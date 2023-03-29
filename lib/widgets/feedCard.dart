@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:project_oneplanet/screens/Account/profilePage.dart';
 import 'package:project_oneplanet/theme/colors.dart';
 import '../helper/firebase_helper.dart';
 import 'package:intl/intl.dart';
@@ -68,45 +69,56 @@ class _FeedCardState extends State<FeedCard> {
                     builder: (context, userData) {
                       if (userData.connectionState == ConnectionState.done) {
                         UserModel targetUser = userData.data as UserModel;
-                        return Row(
-                          children: [
-                            Container(
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                color: AppColors.white,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfilePage(userId: targetUser.id!),
                               ),
-                              child: CachedNetworkImage(
-                                imageUrl: targetUser.photo ??
-                                    "https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg",
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(
-                                  child: SizedBox(
-                                    width: 18.0,
-                                    height: 18.0,
-                                    child: CircularProgressIndicator(),
-                                  ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(18),
+                                  color: AppColors.white,
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              targetUser.name ?? "Guest",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                    fontSize: 17.5,
-                                    color: AppColors.kTextDarkGreen,
+                                child: CachedNetworkImage(
+                                  imageUrl: targetUser.photo ??
+                                      "https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg",
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: SizedBox(
+                                      width: 18.0,
+                                      height: 18.0,
+                                      child: CircularProgressIndicator(),
+                                    ),
                                   ),
-                            ),
-                          ],
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                targetUser.name ?? "Guest",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                      fontSize: 17.5,
+                                      color: AppColors.kTextDarkGreen,
+                                    ),
+                              ),
+                            ],
+                          ),
                         );
                       } else {
                         return const SizedBox();
@@ -114,34 +126,33 @@ class _FeedCardState extends State<FeedCard> {
                     }),
                 SizedBox(
                   width: 300,
-                  child: Text(widget.currentPost.title ?? "Title",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(
-                      fontSize: 18,
-                      color: AppColors.kDarkGreen,
-                    ),
+                  child: Text(
+                    widget.currentPost.title ?? "Title",
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 18,
+                          color: AppColors.kDarkGreen,
+                        ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                 ),
-                SizedBox(height: 3.4,),
+                SizedBox(
+                  height: 3.4,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.kCardTagGreen,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.5, horizontal: 8),
-                    child: Text(widget.currentPost.type ?? "Purpose",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(
-                        fontSize: 15.5,
-                        color: AppColors.white,
-                      ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.5, horizontal: 8),
+                    child: Text(
+                      widget.currentPost.type ?? "Purpose",
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontSize: 15.5,
+                            color: AppColors.white,
+                          ),
                     ),
                   ),
                 ),
@@ -150,23 +161,33 @@ class _FeedCardState extends State<FeedCard> {
                 ),
                 Row(
                   children: [
-                    Icon(Icons.location_on_outlined, color: AppColors.kDarkGreen, size: 20,),
-                    SizedBox(width: 3,),
-                    Text(widget.currentPost.location ?? "Location",
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(
-                        fontSize: 14.5,
-                        color: AppColors.kTextDarkGreen,
-                      ),
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: AppColors.kDarkGreen,
+                      size: 20,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      widget.currentPost.location ?? "Location",
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontSize: 14.5,
+                            color: AppColors.kTextDarkGreen,
+                          ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.calendar_today_outlined, color: AppColors.kDarkGreen, size: 18,),
-                    SizedBox(width: 4,),
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      color: AppColors.kDarkGreen,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
                     Text(
                       "${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}  ${DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.currentPost.eventTime ?? "0")))}",
                       style: Theme.of(context).textTheme.subtitle1!.copyWith(
