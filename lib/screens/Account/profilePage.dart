@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:project_oneplanet/helper/firebase_helper.dart';
 import 'package:project_oneplanet/theme/colors.dart';
 import 'package:rive/rive.dart';
@@ -17,6 +19,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int points = 20;
+  bool selected = false;
 
   Artboard? _riveArtboard;
   SMIInput<double>? _progress;
@@ -203,18 +206,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              child:
-                                  Image.asset('assets/images/reward_logo.png'),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
                             Row(
                               children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child:
+                                  Image.asset('assets/images/reward_logo.png'),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Text(
                                   targetUser.points.toString(),
                                   style: Theme.of(context)
@@ -235,6 +239,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                           color: AppColors.neutral90),
                                 ),
                               ],
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  if(selected){
+                                    selected = false;
+                                  } else {
+                                    selected = true;
+                                  }
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: selected ? AppColors.kFollowingGreen : AppColors.kFollowGreen,
+                                elevation: 0,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 1),
+                                child: Text(
+                                  selected ? "Following" : "Follow",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 14.6, color: selected ? Colors.grey : Colors.white, fontWeight: FontWeight.w500),
+                                ),
+                              ),
                             ),
                           ],
                         ),

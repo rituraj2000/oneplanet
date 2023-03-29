@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_oneplanet/apis/apis.dart';
 import 'package:project_oneplanet/screens/homePage.dart';
 import 'package:project_oneplanet/screens/landingPage.dart';
+import 'package:project_oneplanet/theme/colors.dart';
 
 import '../../models/user_model.dart';
 
@@ -84,25 +85,65 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              "Google Login Page Animation",
+      body: Container(
+        width: screenWidth,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.75,
+            image: AssetImage("assets/images/login_cover.gif"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              height: 0.4 * screenHeight,
             ),
-          ),
-          SizedBox(
-            height: 100,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              signInWithGoogle();
-            },
-            child: Text("Signin with google"),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    signInWithGoogle();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffD7F8A9),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 3, vertical: 7),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          child: Image.asset(
+                            'assets/images/googlelogo.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Signin with Google",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: AppColors.kDarkGreen),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

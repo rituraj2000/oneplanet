@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
-    Future.delayed(const Duration(milliseconds: 3500), () async {
+    Future.delayed(const Duration(milliseconds: 5200), () async {
       User? currentUser = APIs.auth.currentUser;
 
       if (currentUser != null) {
@@ -50,30 +50,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: 0.7 * screenWidth,
-            width: 0.6 * screenWidth,
-            child: Center(child: CircularProgressIndicator()),
-            // child: Image.asset(
-            //   'assets/images/loading.gif',
-            //   fit: BoxFit.fitHeight,
-            // ),
+      body: Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.75,
+            image: AssetImage("assets/images/loading.gif"),
+            fit: BoxFit.cover,
           ),
-          SizedBox(height: 0.1 * screenWidth),
-          Center(
-            child: Text(
-              'OnePlanet',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1
-                  ?.copyWith(color: AppColors.kGreenYellow, letterSpacing: 1.2),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

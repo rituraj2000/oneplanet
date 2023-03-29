@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 12, left: 9),
                 child: DropdownButton<String>(
                   isDense: true,
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18, color: AppColors.kDarkGreen),
                   value: selectedValue,
                   onChanged: (String? newValue) {
                     setState(() {
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(value),
                       ))
                       .toList(),
-                  icon: Icon(Icons.arrow_drop_down),
+                  icon: Icon(Icons.arrow_drop_down, color: AppColors.kDarkGreen,),
                   iconSize: 30,
                   underline: SizedBox(),
                 ),
