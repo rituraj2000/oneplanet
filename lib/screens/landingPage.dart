@@ -13,6 +13,7 @@ import 'package:project_oneplanet/theme/colors.dart';
 import '../apis/apis.dart';
 import '../helper/firebase_helper.dart';
 import '../models/user_model.dart';
+import './Chat Rooms/user_chat_room_list.dart';
 
 class LandingPage extends StatefulWidget {
   final User currentUser;
@@ -127,7 +128,7 @@ class _LandingPageState extends State<LandingPage>
         MapScreen(),
 
         ///Chat Page
-        EventChatRoom(),
+        ChatRoomList(),
 
         ///Account page
         AccountPage(
@@ -170,15 +171,6 @@ class _LandingPageState extends State<LandingPage>
                 size: 24,
                 color: color,
               ),
-              // const SizedBox(height: 4),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8),
-              //   child: Text(
-              //     "brightness $index",
-              //     maxLines: 1,
-              //     style: TextStyle(color: Colors.black),
-              //   ),
-              // )
             ],
           );
         },
