@@ -1,15 +1,164 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:project_oneplanet/models/Event.dart';
 import '../../helper/firestore_methods.dart';
 import 'package:project_oneplanet/screens/Chat%20Rooms/event_chat_room.dart';
 
+class EventDetailsScreen extends StatefulWidget {
+  final String eventID;
+
+  EventDetailsScreen({required this.eventID});
+
+  @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  //failed to join | Not Joined | Already Joined
+  //            -1 |          0 |             1
+  int joining_status = 0;
+
+  void _joinGroup() async {
+    String userID = await FirebaseAuth.instance.currentUser!.uid;
+
+    try {
+      String res = await FirestoreMethods().addUserToEventGroup(widget.eventID);
+
+      if (res == 'success') {
+        setState(() {
+          joining_status = 1;
+        });
+
+        print(joining_status);
+      } else {
+        joining_status = -1;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  EventModel? event;
+
+  void _setCurrentEvent() async {
+    EventModel? res = await FirestoreMethods().getEventById(widget.eventID);
+
+    setState(() {
+      event = res;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setCurrentEvent();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF2E8747),
+      body: Column(
+        children: [
+          Expanded(
+              flex: 3,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      event != null
+                          ? event!.photo
+                          : 'https://www.un.org/sustainabledevelopment/wp-content/uploads/2019/08/E-Goal-06-1024x1024.png',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )),
+          Expanded(
+            flex: 3,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Color(0xFF2E8747),
+                //boxShadow: [BoxShadow(blurRadius: 6)],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      EventTitle(
+                        title: event != null ? event!.title : "NULL",
+                        participant_count:
+                            event != null ? event!.participants.length : 0,
+                      ),
+                      JoinButton(
+                        ontTap: () {
+                          _joinGroup();
+                        },
+                        joining_stat: (event != null &&
+                                event!.participants.contains(
+                                    FirebaseAuth.instance.currentUser!.uid))
+                            ? 1
+                            : joining_status,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      EventLocationWidget(
+                          locationName:
+                              event != null ? event!.location : "NULL"),
+                      EventDateWidget(
+                          eventDate:
+                              event != null ? int.parse(event!.date) : 0),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 30, color: Colors.black.withOpacity(0.2))
+                ],
+              ),
+              child: Text(
+                event != null ? event!.description : "NULL",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class JoinButton extends StatelessWidget {
   final Function ontTap;
+  int joining_stat = 0;
 
   JoinButton({
     required this.ontTap,
+    required this.joining_stat,
   });
 
   @override
@@ -19,7 +168,9 @@ class JoinButton extends StatelessWidget {
         ontTap();
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
+        backgroundColor: (joining_stat == 1)
+            ? Color.fromARGB(255, 17, 200, 206)
+            : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
@@ -29,11 +180,11 @@ class JoinButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
         child: Text(
-          '+ Join',
+          (joining_stat == 1) ? 'Joined In!' : 'Join',
           style: TextStyle(
             fontSize: 15.0,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: (joining_stat == 1) ? Colors.white : Colors.black,
           ),
         ),
       ),
@@ -42,7 +193,8 @@ class JoinButton extends StatelessWidget {
 }
 
 class EventDateWidget extends StatelessWidget {
-  const EventDateWidget({super.key});
+  final int eventDate;
+  EventDateWidget({required this.eventDate});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +207,7 @@ class EventDateWidget extends StatelessWidget {
         ),
         const SizedBox(width: 10.0),
         Text(
-          'April 1, 2023',
+          '${formatDateTime(eventDate)}',
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.bold,
@@ -69,7 +221,9 @@ class EventDateWidget extends StatelessWidget {
 }
 
 class EventLocationWidget extends StatelessWidget {
-  const EventLocationWidget({super.key});
+  final String locationName;
+
+  EventLocationWidget({required this.locationName});
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +235,15 @@ class EventLocationWidget extends StatelessWidget {
           color: Colors.white.withOpacity(0.6),
         ),
         const SizedBox(width: 10.0),
-        Text(
-          'Awantika Colony',
-          style: TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white.withOpacity(0.6),
+        SizedBox(
+          width: 150,
+          child: Text(
+            locationName,
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withOpacity(0.6),
+            ),
           ),
         ),
         const SizedBox(width: 10.0),
@@ -96,24 +253,29 @@ class EventLocationWidget extends StatelessWidget {
 }
 
 class EventTitle extends StatelessWidget {
-  const EventTitle({super.key});
+  final String title;
+  final int participant_count;
+  EventTitle({required this.title, required this.participant_count});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Event Name',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        SizedBox(
+          width: 200,
+          child: Text(
+            '${title.toUpperCase()}',
+            style: TextStyle(
+              fontSize: 17.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         const SizedBox(height: 10.0),
         Text(
-          '10 Participants',
+          '${participant_count} Participants',
           style: TextStyle(
             fontSize: 12.0,
             fontWeight: FontWeight.bold,
@@ -125,94 +287,11 @@ class EventTitle extends StatelessWidget {
   }
 }
 
-class EventDetailsScreen extends StatelessWidget {
-  final String eventID;
-
-  EventDetailsScreen({required this.eventID});
-
-  void _joinGroup(BuildContext ctx) async {
-    String userID = await FirebaseAuth.instance.currentUser!.uid;
-
-    try {
-      String res = await FirestoreMethods()
-          .addUserToEventGroup("dvGz9YudHKRcuIn2l3wS2s3jBts2", eventID);
-
-      if (res == "success") {
-        Navigator.push(
-          ctx,
-          MaterialPageRoute(
-            builder: (ctx) => EventChatRoom(),
-          ),
-        );
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-              flex: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://www.socialtables.com/wp-content/uploads/2016/10/iStock-540095978.jpg',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              )),
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Color(0xFF2E8747),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      EventTitle(),
-                      JoinButton(ontTap: () {
-                        _joinGroup(context);
-                      }),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      EventLocationWidget(),
-                      EventDateWidget(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Text(
-                "Victoria Beckham brought the glamour to a fast food drive-thru as she treated sons Romeo and Cruz to an an In-N-Out Burger in Los Angeles on Thursday. Mail Online, 5 November 2019.",
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+String formatDateTime(int millisecondsSinceEpoch) {
+  DateTime dateTime =
+      DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+  String day = dateTime.day.toString().padLeft(2, '0');
+  String month = dateTime.month.toString().padLeft(2, '0');
+  String year = dateTime.year.toString().substring(2);
+  return '$day | $month | $year';
 }
