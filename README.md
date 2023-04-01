@@ -1,6 +1,6 @@
 # OnePlanet
 
-[![OnePlanet Logo](http://img.youtube.com/vi/3rXXsrO_mBQ/0.jpg)](http://www.youtube.com/watch?v=3rXXsrO_mBQ "OnePlanet")
+[![OnePlanet Logo](https://user-images.githubusercontent.com/81508078/229271164-3b11e466-f4fc-483c-bf41-4524f16c51de.jpg)](http://www.youtube.com/watch?v=3rXXsrO_mBQ "OnePlanet")
 
 # About App
 
@@ -82,3 +82,6 @@ Please refer to the project's style and contribution guidelines for submitting p
 - Connecting to people 
 - Community chat groups
 - Goverment schemes and awareness
+
+
+
